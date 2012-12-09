@@ -1,0 +1,55 @@
+<modification>
+	<id><![CDATA[Vqmod for Store Keyword]]></id>
+	<version><![CDATA[1.5x]]></version>
+	<vqmver><![CDATA[2.1.5]]></vqmver>
+	<author><![CDATA[Flo from tylsoft.net]]></author>
+	<file name="admin/controller/setting/setting.php">
+		<operation>
+			<search position="after" error="log"><![CDATA[$this->data['entry_meta_description'] = $this->language->get('entry_meta_description');]]></search>
+			<add><![CDATA[
+			$this->data['entry_meta_keyword'] = $this->language->get('entry_meta_keyword');
+			]]></add>
+		</operation>
+		<operation>
+			<search position="before" error="log"><![CDATA[if (isset($this->request->post['config_meta_description'])) {]]></search>
+			<add><![CDATA[
+		if (isset($this->request->post['config_meta_keyword'])) {
+			$this->data['config_meta_keyword'] = $this->request->post['config_meta_keyword'];
+		} else {
+			$this->data['config_meta_keyword'] = $this->config->get('config_meta_keyword');
+		}
+			]]></add>
+		</operation>
+	</file>
+
+	<file name="admin/language/*/setting/setting.php">
+		<operation>
+			<search position="after" error="log"><![CDATA[$_['entry_meta_description']       = 'Meta Tag Description:';]]></search>
+			<add><![CDATA[
+			$_['entry_meta_keyword']              = 'Meta Keyword:';
+			]]></add>
+		</operation>
+	</file>
+	
+	<file name="admin/view/template/setting/setting.tpl">
+		<operation>
+			<search position="before" error="log" offset="2"><![CDATA[<?php echo $entry_meta_description; ?>]]></search>
+			<add><![CDATA[
+			 <tr>
+            <td><?php echo $entry_meta_keyword; ?></td>
+            <td><textarea name="config_meta_keyword" cols="40" rows="5"><?php echo $config_meta_keyword; ?></textarea></td>
+          </tr>
+          
+			]]></add>
+		</operation>
+	</file>
+
+	<file name="catalog/controller/common/home.php">
+		<operation>
+			<search position="after" error="log"><![CDATA[$this->document->setDescription($this->config->get('config_meta_description'));]]></search>
+			<add><![CDATA[
+			$this->document->setKeywords($this->config->get('config_meta_keyword'));
+          	]]></add>
+		</operation>
+	</file>
+</modification>
